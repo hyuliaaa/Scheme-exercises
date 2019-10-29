@@ -1,0 +1,39 @@
+(define (sum1 k)
+  (if (>= k 100)0
+      (+ (* k k) (sum1(+ k 1)))))
+
+
+(define (sum a b term next)
+  (if(> a b)0 (+ (term a) (sum(next a) b term next))))
+
+
+(define (square x) (* x x))
+(define (1+ x) (+ x 1))
+(define (sum11 k) (sum k 100 square 1+))
+
+
+(define (product a b term next)
+(if(> a b) 1 (* (term a) (product(next a) b term next))))
+
+
+(define (sum-step a b next)
+  (if (> a b)
+      0
+      (+ a (sum-step (next a)) b next)))
+
+(define (accumulate op nv a b term next)
+  (if (> a b) 0
+      (op(term a) (accumutate op nv (next a) b term))))
+
+(define (sum a b term next)(accumulate + 0 a b term next))
+(define (product a b term next)(accumulate * 1 a b term nexr))
+
+(define (sum-term a b term)
+  (if (> a b)
+      0
+      (+ (term a) (sum-term (+ 1 a) b term))))
+
+(define (sum a b term next)
+        (if (> a b)
+            0
+            (+ (term a) (sum (next a ) b term next))))
