@@ -1,0 +1,63 @@
+(define (fact n)
+  (if(<= n 1)
+     1
+     (* n (fact(- n 1)))))
+
+
+(define (fact-iter n)
+  (define (help i result)
+    (if (= i n)
+        (* result n)
+        (help (+ i 1) (* result i))))
+  (helper 1 1))
+
+(define (bool-to-num b)
+  (if b 1 0))
+
+(define (count-digits n)
+  (if (< n 10)
+      1
+      (+ 1 (count-digits (quotient n 10)))))
+
+
+(define (count-digit n)
+  (define (iter count number)
+    (if (< number 10)
+        count
+        (iter (+ count 1) (/ number 10))))
+  (iter 1 (abs n)))
+
+
+
+(define (reverse-digits n)
+  (define (iter number result)
+    (if (= number 0)
+        result
+        (iter (quotient number 10)(+ (* result 10)(remainder number 10)))))
+  (iter n 0))
+
+
+(define (palyndrome? n)
+  (= (reverse-digits n) n))
+
+
+(define (sum-digits n)
+  (if (= n 0)
+      0
+      (+ (remainder n 10) (sum-digits (quotient n 10)))))
+
+
+(define (divides? x y)
+  (= (remainder y x) 0))
+
+(define (bin-to-dec n)
+  (if (< n 10)
+      n
+      (+ (* 2 (bin-to-dec (quotient n 10)))
+         (remainder n 10))))
+
+(define (dec-to-bin n)
+  (if (< n 2)
+      n
+      (+ (* 10 (dec-to-bin (quotient n 2)))
+         (remainder n 2))))
