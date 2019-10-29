@@ -1,0 +1,25 @@
+(define l (list 1 2 3 4 5 6 7 8 9))
+
+(define (lenght l)
+  (if (null? l)
+      0
+      (+ 1 (lenght (cdr l)))))
+
+(define (sum l)
+  (if(null? l)
+     0
+     (+ (car l)(sum(cdr l)))))
+
+(define (last l)
+  (if(null? l)
+     #f
+     (if (null? (cdr l))
+                (car l)
+                (last(cdr l)))))
+
+
+(define (append l M) 
+  (if (null? l)
+      M 
+      (cons (car l) (append (cdr l) M))))
+
