@@ -1,0 +1,65 @@
+(define (sum k)
+  (if (> k 100)
+      0
+      (+ (* k k ) (sum (+ k 1)))))
+
+(define (sum a b term next)
+  (if (> a b)
+      0
+      (+ (term a) (sum (next a) b term next))))
+
+
+(define (square x) (* x x))
+
+(define (1+ x) (+ 1 x))
+
+(define (prod a b term next)
+  (if (> a b)
+      1
+      (* (term a) (prod (next a) b term next  ))))
+
+
+(define (accumulate op nv a b term next)
+  (if (> a b)
+      nv
+      (op (term a)(accumulate op nv (next a) term))))
+
+(define (sum a b term next)(accumulate + 0 a b term next))
+
+(define (accumulate-i op nv a b next)
+  (if (> a b)
+      nv
+      (accumulate-i op (op nv (term a)) (next a) b term next)))
+
+
+
+(define l(list 1 2 3 4 5 6))
+(define lt(list 1 2 3 4 5 6))
+
+(define (lenght l)
+  (if (null? l)
+      0
+      (+ 1 (lenght(cdr l)))))
+
+
+(define (from-to a b)
+  (if (> a b) '()
+      (cons a (from-to (+ a 1) b))))
+
+(define (collect a b next)
+  (if (> a b) '()
+      (cons a (collect (next a) b next))))
+
+(define (1+ x) (+ x 1))
+
+(define (ffrom-to a b)(collect (next a) b 1+))
+
+(define (appendd l1 l2)
+  (if(null? l1)
+  l2
+  (cons (car l1) (appendd (cdr l1) l2))))
+
+(define (rev l)
+  (if (null? l)
+      l
+  (append (rev (cdr l))(list (car l)) )))
