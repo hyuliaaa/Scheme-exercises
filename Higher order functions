@@ -1,0 +1,51 @@
+(define (sum k)
+  (if (> k 100)
+      0
+      (+ (* k k) (sum (+ 1 k)))))
+
+(define (sum a b term next)
+  (if (> a b)
+      0
+      (+ (term a)(sum (next a) b term next))))
+
+(define (1+ x)(+ 1 x))
+(define (sq x)(* x x))
+
+(define (product a b term next)
+  (if (> a b)
+      1
+      (* (term a) (product (next a) b term next))))
+
+(define (accumulate op nv a b term next)
+  (if (> a b)
+      nv
+      (op (term a) (accumulate op nv (next a) b term next))))
+
+(define (accumulate-i op nv a b term next)
+  (if (> a b)
+      nv
+      (accumulate-i op (op nv (term a)) (next a) b term next)))
+  
+(define (p n x)
+  (accumulate + 0 0 n term 1+))
+
+(define (id x) x)
+
+(define (fact n)
+  (accumulate * 1 1 n (lambda (x) x) 1+))
+
+(define (pow x n)
+  (accumulate * 1 1 n (lambda (i) x) 1+))
+
+(define (n+ n) (lambda (i) (+ i n)))
+(define 1+ (n+ 1))
+
+(define (repeated f n)
+  (if (= n 0) id
+      (compose f (repeated f (- n 1)))))
+
+(define (repeated f n)
+  (lambda (x) (if (= n 0) x (f((repeated f (- n 1)) x )))))
+
+
+
