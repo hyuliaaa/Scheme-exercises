@@ -1,57 +1,120 @@
-(define (sum-step a b next)
+(define (sum a b  term next)
   (if (> a b)
       0
-      (+ a (sum-step (next a) b next))))
-
-(define (1+ x)(+ 1 x))
-
-(define (sum-term a b term)
-  (if (> a b)
-      0
-      (+ (term a)(sum-term (+ a 1) b term))))
-
-(define (sq x)(* x x))
-
-(define (sum a b term next)
-  (if(> a b)
-     0
-     (+ (term a)(sum(next a) b term next))))
-
-(define (my-sin m x)
-  (sum 0 m (lambda (i) (/ (* (expt -1 i) (expt x (+ (* 2 i) 1))) (fact(+ (* 2 i) 1))))
-             1+))
+      (+ (term a) (sum (next a) b term next))))
 
 (define (fact n)
   (if (= n 0)
       1
-      (* n (fact (- n 1)))))
+      (* n(fact(- n 1)))))
 
+(define (1+ n)(+ 1 n))
+
+(define (my-exp m x)
+  (sum 0 m
+       (lambda (i) (/ (expt x i) (fact i)))
+         1+))
+
+(define (my-sin m x)
+  (sum 0 m
+       (lambda (i) (/ (* (expt -1 i) (expt x (+ (* 2 i) 1))) (fact(+(* 2 i) 1))))
+       1+))
 
 (define (my-cos m x)
   (sum 0 m
-       (lambda(i) (/ (* (expt -1 i)(expt x (* 2 i))) (fact (* 2 n))))
+       (lambda (i)(/ (* (expt -1 i) (expt x (* 2 i))) (fact (* 2 i))))
        1+))
 
 (define (product a b term next)
   (if (> a b)
       1
-      (* (term a) (product (next a) b term next))))
+      (* (term a) (product (nextt a) b term next))))
 
 (define (sprod p x)
-  (product 1 p (lambda (i) (my-sin i x) ) 1+))
+  (product 1 p
+           (lambda (i) (my-sin i x))
+           1+))
 
 (define (accumulate op nv a b term next)
- (if (> a b)
-     nv
-     (op (term a) (accumulate op nv (next a) b term next))))
+  (if (> a b)
+      nv
+      (op (term a) (accumulate op nv (next a) b term next))))
 
 (define (accumulate-i op nv a b term next)
   (if (> a b)
       nv
-      (accumulate-i op (op nv (term a)) (next a )b term next)))
+      (accumulate i op (op nv (term a)) (term a) b term next)))
 
 (define (fact n)
-  (accumulate * 1 1 n (lambda (i) i) 1+))
+  (accumulate * 1 1 n (lambda (x) x) 1+))
 
 (define (sum a b term next)
-  (accumulate + 0 a b term next))
+  (accumulate + 0 a b term  next))
+
+(define (product a b term next)
+  (accumulate * 1 a b term next))
+
+(define (exists? pred? a b)
+(accumulate (lambda (x y) (or x y))
+            #f
+            a
+            b
+            pred?
+            1+))
+
+(define (forall? pred? a b)
+  (accumulate (lambda (x y)(and x y))
+                #t
+                a
+                b
+                pred?
+                1+))
+
+(define (count-pred pred? a b next)
+  (accumulate + 0
+              a
+              b
+              (lambda (i) (if (pred? i) 1 0))
+              next))
+
+(define (combination n k)
+ (/ (fact n) (* (fact k)(fact(- n k)))))
+
+(define (variation k n)
+  (/ (fact n) (fact (- n k))))
+
+(define (flip f)
+  (lambda (x y)
+    (f y x)))
+
+(define (twice f x)(f (f x)))
+(define (square x)(* x x))
+
+(define (compose f g)
+  (lambda (x) (f (g x))))
+
+(define (repeated f n)
+  (if (= n 0)
+      (lambda (i) x)
+      (compose f (repeated f (- n 1)))))
+
+(define (derive f dx)
+  (lambda (x)
+  (/ (- (f ( + x dx)) f x)(dx))))
+
+(define (reverse-digits n)
+  (define (iter number result)
+    (if (= number 0)
+        result
+        (iter (quotient number 10)(+ (* result 10)(remainder number 10)))))
+  (iter n 0))
+
+(define (palyndrome? n)
+  (= (reverse-digits n) n))
+
+(define (count-palyndromes a b)
+  (accumulate + 0 a b (lambda(i) (if (palyndrome? i) 1 0)) 1+))
+
+
+
+
