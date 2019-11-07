@@ -1,25 +1,144 @@
-(define l (list 1 2 3 4 5 6 7 8 9))
-
 (define (lenght l)
   (if (null? l)
       0
       (+ 1 (lenght (cdr l)))))
 
 (define (sum l)
-  (if(null? l)
-     0
-     (+ (car l)(sum(cdr l)))))
+  (if (null? l)
+      0
+      (+ (car l) (sum (cdr l)))))
 
 (define (last l)
-  (if(null? l)
-     #f
-     (if (null? (cdr l))
-                (car l)
-                (last(cdr l)))))
-
-
-(define (append l M) 
   (if (null? l)
-      M 
-      (cons (car l) (append (cdr l) M))))
+      (error "No last element")
+      (if (null? (cdr l))
+          (car l)
+          (last (cdr l)))))
 
+(define (my-append l m)
+  (if (null? l)
+      m
+      (cons (car l) (my-append (cdr l) m))))
+
+(define (push-back x l)
+  (if (null? l)
+      (cons x '())
+      (cons (car l) (push-back  x (cdr l)))))
+
+(define (mem? x l)
+  (and (not(null? l))
+       (or (equal? (car l) x)
+           (mem? x (cdr l)))))
+
+(define (from-to a b)
+  (if (> a b)
+      '()
+      (cons a (from-to (+ a 1) b))))
+
+(define (my-reverse l)
+  (if (null? l)
+      '()
+      (my-append (my-reverse (cdr l)) (list(car l)))))
+
+(define (square x)(* x x))
+
+(define (my-map f l)
+  (if (null? l)
+      '()
+      (cons (f (car l)) (my-map f (cdr l)))))
+
+
+
+(define (filter pred? l)
+  (if (null? l)
+      l
+      (if (pred? (car l))
+                 (cons (car l) (filter pred? (cdr l)))
+                 (filter pred? (cdr l)))))
+
+(define (scale l x)
+  (if (null? l)
+      '()
+      (cons (* (car l) x ) (scale (cdr l) x))))
+
+
+(define (foldr op nv l)
+  (if (null? l)
+      nv
+      (op (car l) (foldr op nv (cdr l)))))
+
+(define (foldl op nv l)
+  (if (null? l)
+      nv
+      (foldl op (op nv (car l))  (cdr l))))
+
+
+(define (maximum l)
+  (foldr max (car l) l))
+
+(define (partition pred? l)
+  (list (filter pred? l)
+        (filter (lambda (x)
+                  (not (pred? x))) l)))
+
+(define (take n l)
+  (if (or (null? l) (= n 0))
+      '()
+      (cons (car l) (take (- n 1) (cdr l)))))
+
+
+(define (drop n l)
+  (if (or (null? l) (= n 0))
+          l
+          (drop (- n 1) (cdr l))))
+
+(define (my-list-ref l n)
+  (if  (null? l)
+       l
+       (if (= n 0)
+           (car l)
+           (my-list-ref (cdr l) (- n 1)))))
+
+(define (my-list-tail l n)
+  (if (null? l)
+      l
+      (if (= n 0) (cdr l)
+          (my-list tail (cdr l) (- n 1)))))
+
+(define (insert n x l)
+  (if (null? l)
+      (cons x '())
+      (if (= n 0)
+          (cons x l)
+          (cons (car l) (insert (- n 1) x (cdr l))))))
+
+(define (remove x l)
+  (if (null? l)
+      (error "No elements to remove")
+      (if (= x (car l))
+          (cdr l)
+          (cons (car l) (remove  x  (cdr l))))))
+
+(define (explode-digits n)
+  (if (< n 0)
+      (expolode-digits (- n))
+      (if (< n 10)
+          (cons n '())
+          (push-back(remainder n 10) (explode-digits (quotient n 10))))))
+
+          
+(define (digit-occurence d n)
+  (lenght(filter (lambda (x) (= x d))
+                 (explode-digits n))))
+
+(define (remove-from-beginning x l)
+  (if (null? l)
+      l
+      (if (= x (car l))
+          (remove-from-beginning x (cdr l))
+                               l)))
+
+(define (remove-repeats l)
+  (if (null? l)
+      l
+      (cons (car l) (remove-repeats (remove-from-beginning (car l) l)))))
