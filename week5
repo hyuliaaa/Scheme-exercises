@@ -1,0 +1,38 @@
+(define (atom? x)
+  (and (not (null? x)) (not (pair? x))))
+
+(define (count-atoms l)
+  (if (null? l)
+      0
+      (if (atom? l)
+          1
+          (+ (count-atoms (car l))(count-atoms (cdr l))))))
+
+(define (flatten l)
+  (if (null? l)
+      l
+      (if (atom? l)
+          (list l)
+          (append (flatten (car l)) (flatten (cdr l))))))
+
+(define (deep-reverse l)
+  (if (null? l)
+      '()
+      (if (atom? l)
+          l
+          (append (deep-reverse(cdr l)) (list(deep-reverse (car l)))))))
+
+(define (deep-foldr nv term op l)
+  (if (null? l)
+      nv
+      (if (atom? l)
+          (term l)
+          (op (deep-foldr nv term op (car l))
+              (deep-foldr nv term op (cdr l))))))
+
+(define (atoms-count)
+  (deep-foldr 0 (lambda (x) 1) + l))
+
+(define (snoc x l) (append l (list x)))
+
+          
