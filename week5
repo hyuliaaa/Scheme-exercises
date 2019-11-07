@@ -1,5 +1,85 @@
+
+
+(define (maximum l)
+  (if (null? (cdr l))
+      (car l)
+      (max(car l)(maximum (cdr l)))))
+
+(define (minimum l)
+  (if (null? (cdr l))
+             (car l)
+             (min (car l) (minimum (cdr l)))))
+
+(define (remove x l)
+  (if (null? l)
+      l
+      (if (= x (car l))
+          (cdr l)
+          (cons(car l)(remove x (cdr l))))))
+
+(define (selection-sort l)
+  (if (null? l)
+      l
+      (let ((m (minimum l)))
+      (cons m (selection-sort (remove m l))))))
+
+(define (take n l)
+  (if (or (null? l) (= n 0))
+      '()
+      (cons (car l) (take (- n 1) (cdr l)))))
+
+(define (drop n l)
+  (if (or (null? l) (= n 0))
+      l
+      (drop (- n 1) (cdr l))))
+     
+
+(define (slice a b l)
+  (take (+ 1 (- b a)) (drop a l)))
+
+(define (zip l m)
+  (if (or (null? l) (null? m))
+      '()
+      (cons (cons (car l) (car m))
+            (zip (cdr l) (cdr m)))))
+
+(define (zip-with f l m)
+  (if (or (null? l) (null? m))
+      '()
+      (cons (f (car l) (car m))
+            (zip-with f (cdr l) (cdr m)))))
+
+(define (unique L)
+  (if (null? L)
+      L
+      (let ((h (car L)))
+        (cons h (unique (filter (lambda (x)
+                                  (not (equal? x h)))
+                                L))))))
+
+(define (intersection l m)
+  (filter (lambda (x) (member x m)) l ))
+
+
+(define (union L M)
+  (unique (append L M)))
+
+(define (set-minus L M)
+  (filter (lambda (x)
+            (not (member x M)))
+          L))
+
+(define (chunk n L)
+  (if (null? L)
+      L
+      (cons (take n L)
+            (chunk n (drop n L)))))
+
+
 (define (atom? x)
   (and (not (null? x)) (not (pair? x))))
+
+
 
 (define (count-atoms l)
   (if (null? l)
@@ -8,6 +88,8 @@
           1
           (+ (count-atoms (car l))(count-atoms (cdr l))))))
 
+
+
 (define (flatten l)
   (if (null? l)
       l
@@ -15,12 +97,16 @@
           (list l)
           (append (flatten (car l)) (flatten (cdr l))))))
 
+
+
 (define (deep-reverse l)
   (if (null? l)
       '()
       (if (atom? l)
           l
           (append (deep-reverse(cdr l)) (list(deep-reverse (car l)))))))
+
+
 
 (define (deep-foldr nv term op l)
   (if (null? l)
@@ -30,9 +116,19 @@
           (op (deep-foldr nv term op (car l))
               (deep-foldr nv term op (cdr l))))))
 
+
+
 (define (atoms-count)
   (deep-foldr 0 (lambda (x) 1) + l))
 
-(define (snoc x l) (append l (list x)))
 
-          
+
+(define (snoc x l) (append l (list x)))
+      
+      
+
+
+      
+
+
+      
