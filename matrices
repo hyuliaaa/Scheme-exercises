@@ -1,0 +1,67 @@
+#lang racket
+(define (all? p? l)
+  (if (null? l)
+      #t
+      (if (p? (car l))
+          (all? p? (cdr l))
+          #f)))
+
+(define (any? p? l)
+  (if (null? l)
+      #f
+      (or (p? (car l)) (any? p? (cdr l)))))
+
+(define m '((1 2 3)(4 5 6)(7 8 9)(10 11 12)))
+
+(define (get-rows m) (length m ))
+(define (get-columns m)(length(car m)))
+
+(define (first-row m)(car m))
+(define (first-column m)(map car m ))
+
+(define (delete-first-row m) (cdr m))
+(define (delete-first-column m) (map cdr m))
+
+; finding row and column by index 
+(define (find-row i m)(list-ref m i))
+(define (find-column i m) (map (lambda (row) (list-ref row i))m))
+
+
+(define (transpose m)
+ (if (null? (car m))
+      '()
+       (cons (first-column m)(transpose (delete-first-column m)))))
+
+
+(define (sum-vectors v1 v2) (map + v1 v2))
+(define (sum-matrices m1 m2) (map sum-vectors m1 m2))
+
+(define (multiply-vectors v1 v2)(apply + (map * v1 v2)))
+
+(define (dimensions m)(cons (length m ) (length (car m))))
+
+(define (atom? x) 
+  (and (not (null? x)) (not (pair? x)))) 
+
+(define (deep-reverse l) 
+  (if (null? l) 
+      '() 
+      (if (atom? l) 
+          l 
+          (append (deep-reverse(cdr l)) (list(deep-reverse (car l)))))))
+
+(define (deep-rev m) (deep-reverse m))
+(define (reverse-columns m) (reverse (deep-rev m)))
+
+(define (empty? m) (null? (car m)))
+
+(define (above-diag m)
+  (if (empty? m)
+      '()
+      (cons (first-row m)
+            (above-diag (delete-first-column (delete-first-row m))))))
+
+
+
+
+ 
