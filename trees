@@ -1,0 +1,93 @@
+#lang racket
+
+(define empty-tree '())
+(define empty-tree? null?)
+
+(define (make-tree root left right)
+  (list root left right))
+
+(define root-tree car)
+(define left-tree cadr)
+(define right-tree caddr)
+
+
+;depth of a tree
+(define (depth t)
+  (if (empty-tree? t)
+      0
+      (+ 1 (max (depth(left-tree t))(depth (right-tree t))))))
+
+(define (pre-order t)
+  (if (empty-tree? t)
+      '()
+      (append (list(root-tree t))
+              (pre-order (left-tree t))
+                         (pre-order (right-tree t)))))
+
+(define (in-order t)
+  (if (empty-tree? t)
+      '()
+      (append (in-order (left-tree t))
+              (list (root-tree t))
+              (in-order (right-tree t)))))
+
+
+(define (post-order t)
+  (if (empty-tree? t)
+      '()
+      (append (post-order (left-tree t))
+              (post-order (right-tree t))
+              (list (root-tree t)))))
+
+
+(define (leaf? x)
+  (and (empty-tree? (left-tree x))
+       (empty-tree? (right-tree x))))
+
+
+(define (count-leaves t)
+  (if (empty-tree? t)
+      0
+      (if (leaf? t)
+          1
+          (+ (count-leaves (left-tree t))
+             (count-leaves (right-tree t))))))
+
+
+(define (tree-sum t)
+  (if (empty-tree? t)
+      0
+      (+ (root-tree t) (tree-sum (left-tree t))(tree-sum(right-tree t)))))
+
+
+
+(define (remove-leaves t)
+  (if (empty-tree? t)
+      t
+      (if (leaf? t)
+          '()
+          (make-tree (root-tree t)
+                     (remove-leaves (left-tree t))
+                     (remove-leaves (right-tree t))))))
+
+
+(define (map-tree f t)
+  (if (empty-tree? t)
+      t
+     (make-tree (f (root-tree t))
+                (map-tree f (left-tree t))
+                (map-tree f (right-tree t)))))
+
+
+(define (balanced? tree)
+  (or (empty-tree? tree)
+      (and (< (abs (- (height (left-tree tree))
+                      (height (right-tree tree))))
+              2)
+           (balanced? (left-tree tree))
+           (balanced? (right-tree tree)))))
+
+
+    
+
+                    
