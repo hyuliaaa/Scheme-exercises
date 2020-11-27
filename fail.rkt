@@ -177,25 +177,3 @@
 
 
 
-
-;zad2 za domashnoto
-; i make one helper function which will divide the number with is prime factors
-; and construct a list with its prime divisors
-(define (prime? n)
-  (define (helper i )
-   (cond [(= i n) #t]
-         [(=(remainder n i) 0) #f]
-         [else (helper (+ i 1))]))
-  (if(< n 2)
-     #f
-     (helper 2)))
-
-(define (factorize n)
-  (define (helper n current)
-    (if (> current  n) '()
-          (if (and (prime? current) (= (remainder n current) 0))
-           (cons current (helper (/ n current) current))
-           (helper n (+ 1 current)))))
-  (helper n 2))
-      
-
